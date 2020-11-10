@@ -25,8 +25,8 @@ public class SimpleTest {
     @BeforeEach
     public void start() throws Exception {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
-        Configuration.driverManagerEnabled = false;
-        Configuration.remote = "http://localhost:4444/wd/hub";
+        Configuration.driverManagerEnabled = false; //c этим нужно будет разобраться
+        Configuration.remote = "http://localhost:4444/wd/hub"; //подключение к удаленному серверу Selenium
         Configuration.browserSize = "1366x768";
         Configuration.timeout = 6000;
         Configuration.fastSetValue = true;
