@@ -1,0 +1,19 @@
+Пример использования 2 докеров
+1) Докер с maven и тестом на selenide. junit 5, jdk-14
+2) Докер c selenium server и драйвером Chrome
+
+Настройка образов для автоматизации
+1) Образ с maven jdk-14
+
+docker pull maven:3.6.3-jdk-14 		--установка на ПК image с maven jdk-14. https://hub.docker.com/_/maven?tab=tags&page=1&name=3.6.3-jdk
+docker run --rm maven:3.6.3-jdk-14 mvn -v 		--приверить, что образ корректно установился. Ниже команда запуска теста "SimpleTest" из директории "/Volumes/Date/Docker/LearnQA_Docker/Autotests/", где лежит pom-файл. ВАЖНО - путь в target и после "-w" должны совпадать, чтобы maven нашел исполняемый файл. По умолчанию Мавен смотрит в корень диска
+docker run --rm --mount type=bind,src=/Volumes/Date/Docker/LearnQA_Docker/Autotests/,target=/usr/src/mymaven -w /usr/src/mymaven maven:3.6.3-jdk-14 mvn -Dtest=SimpleTest test
+
+2) Образ с selenium Сервером для работы с Chrome драйвером
+
+docker pull selenium/standalone-chrome:3.141.59 		--скачиваем имедэ с селениум сервером https://hub.docker.com/r/selenium/standalone-chrome/tags
+docker run -d --rm -p 4444:4444 selenium/standalone-chrome:3.141.59 		--запуск контейнера с сервером. Клюю "-d", чтобы не проваливаться во внутрь контейнера. Внешний порт "4444" (первое значение), внутренний порт (докера) "4444" (порты задаются командой -p)
+После команды выше будет запущен сервер на локале - http://localhost:4444
+
+--Теперь запускаем контейнер с селениум сервером. Добавилась команда "--network host", подключение нашего контейнера к сети ПК, чтобы был доступ по сети к другим контейнерам
+docker run --rm --network host --mount type=bind,src=/Volumes/Date/Docker/LearnQA_Docker/Autotests/,target=/usr/src/mymaven -w /usr/src/mymaven maven:3.6.3-jdk-14 mvn -Dtest=SimpleTest test
