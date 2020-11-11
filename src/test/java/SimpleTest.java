@@ -25,7 +25,9 @@ public class SimpleTest {
     @BeforeEach
     public void start() throws Exception {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide().screenshots(true).savePageSource(true));
-        Configuration.driverManagerEnabled = false; //c этим нужно будет разобраться
+        Configuration.browser ="chrome";
+        Configuration.baseUrl="https://www.rbc.ru";
+        Configuration.driverManagerEnabled = false; //отключение автоматического управления драйвером, чтобы драйвер не запускался на локальном ПК
         Configuration.remote = "http://localhost:4444/wd/hub"; //подключение к удаленному серверу Selenium
         Configuration.browserSize = "1366x768";
         Configuration.timeout = 6000;
@@ -35,7 +37,7 @@ public class SimpleTest {
     @org.junit.jupiter.api.Test
     public void SearchEmpty() throws InterruptedException {
 
-        open("https://www.rbc.ru/companies/");
+        open("/companies/");
         $(".home__search-form .search-form__btn");
         getWebDriver().findElement(By.cssSelector(".home__search-form .search-form__btn")).click(); //использование selenium в selenide
         Thread.sleep(1000);
